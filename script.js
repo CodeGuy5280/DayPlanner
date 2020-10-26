@@ -6,9 +6,9 @@
 
 $(document).ready(function() {
 	const m = moment();
-	$("#currentDay").html(moment().format("LL"));
+	$("#currentDay").html(moment().format("LLLL"));
 	console.log(moment());
-	console.log(m.format('LL'));
+	console.log(m.format("LLLL"));
 
 // moment(?).isBefore(your current hours var) for past
 // moment(?).isAfter(your current hours var) for future
@@ -65,7 +65,7 @@ var planner = JSON.parse(localStorage.getItem("planner")) || initializePlanner()
 	}
 
 	$(".saveBtn").on("click", function() {
-		$(this).css("color", "#06AE");
+		//location of proper values to be stored for saveBtn
 		var time = $(this)
 			.parent()
 			.find(".description")
