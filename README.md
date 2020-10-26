@@ -19,6 +19,8 @@ To Finish
 make the save button work
 save textContent with save button LocalStorage
 
+### Link: https://codeguy5280.github.io/DayPlanner/
+
 # 05 Third-Party APIs: Work Day Scheduler
 
 ## Your Task
