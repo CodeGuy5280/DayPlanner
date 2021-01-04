@@ -1,84 +1,46 @@
-// var saveBtn = document.getElementsByClassName("saveBtn");
-// var userInput = document.getElementsByClassName("description")
+//Updates the date for the calendar
+var currDay = document.getElementById("currentDay");
+currDay.innerHTML = moment().format("LL");
 
-
-
-
-$(document).ready(function() {
-	const m = moment();
-	$("#currentDay").html(moment().format("LLLL"));
-	console.log(moment());
-	console.log(m.format("LLLL"));
-
-// moment(?).isBefore(your current hours var) for past
-// moment(?).isAfter(your current hours var) for future
-// moment(?).isSame(your current hours var) for present
-
-//use of json to parse the item planner to local storage w/c.log
-var planner = JSON.parse(localStorage.getItem("planner")) || initializePlanner();
-	console.log(planner);
-//loop for time
-	for (var time in planner) {
-		console.log(time, planner[time]);
-		var tr = $("<tr>")
-			// .addClass("row time-block");
-		var tdTime = $("<td>")
-			.addClass("hour")
-			.text(time);
-		var tdEvent = $("<td>")
-			.addClass("textArea");
-        //used for determining the time
-		var thisTime;
-		
-		if (moment(time, "h a").isSame(moment(), "hour")) {
-			thisTime = "present";
-		} else if (moment(time, "h a").isAfter(moment())) {
-			thisTime = "future";
-		} else if (moment(time, "h a").isBefore(moment())) {
-			thisTime = "past";
-		}
-        //event Text/textarea
-		var eventText = $("<textarea>")
-			.addClass("description") // col-md
-			.addClass(thisTime)
-			.attr("data-time", time)
-			.val(planner[time]);
-		tdEvent.append(eventText);
-        //submit saveBtn
-		var tdSubmit = $("<td>").addClass("saveBtn"); 
-
-		// tr.append(tdTime, tdEvent, tdSubmit);
-
-		$("#myPlanner").append(tr);
-		//#myPlanner
-	}
-
-	function initializePlanner() {
-		var tempPlanner = {};
-        
-		for (var i = 8; i < 18; i++) {
-			
-			tempPlanner[moment(i, "H").format("h a")] = "";
-		}
-		//.container
-		return tempPlanner;
-	}
-
-	$(".saveBtn").on("click", function() {
-		//location of proper values to be stored for saveBtn
-		var time = $(this)
-			.parent()
-			.find(".description")
-			.attr("data-time");
-		var text = $(this)
-			.parent()
-			.find(".description")
-			.val();
-		console.log(time, text);
-
-		planner[time] = text;
-
-		localStorage.setItem("planner", JSON.stringify(planner));
-	});
+//On click function for save button
+$(".saveBtn").on("click", function (event) {
+  event.preventDefault(); // used so page doesnt refresh, saves events to calendar
+  var time = $(this).parent().attr("id");
+  var value = $(this).siblings(".description").val();
+  localStorage.setItem(time, value);
 });
 
+//Function that compares current hour to the current time
+function hourChange() {
+  var timeCurrent = moment().hours();
+  $(".time-block").each(function () {
+    console.log(timeCurrent); // 12 hour time or 24 hour
+
+    var compareHour = parseInt($(this).attr("id").split("-")[1]);
+    console.log(compareHour); // 12 hour or 24 hour
+    if (compareHour < timeCurrent) {
+      $(this).addClass("past");
+    } else if (compareHour === timeCurrent) {
+      $(this).addClass("present");
+      $(this).removeClass("past");
+    } else if (compareHour > timeCurrent) {
+      $(this).addClass("future");
+      $(this).removeClass("present");
+      $(this).removeClass("past");
+    }
+  });
+}
+//Runs the function above
+hourChange(); 
+var timeChecker = setInterval(hourChange, 15000);
+
+//Finds location in local storage for each hour listing 
+$("#hour-9 .description").val(localStorage.getItem("hour-9"));
+$("#hour-10 .description").val(localStorage.getItem("hour-10"));
+$("#hour-11 .description").val(localStorage.getItem("hour-11"));
+$("#hour-12 .description").val(localStorage.getItem("hour-12"));
+$("#hour-13 .description").val(localStorage.getItem("hour-13"));
+$("#hour-14 .description").val(localStorage.getItem("hour-14"));
+$("#hour-15 .description").val(localStorage.getItem("hour-15"));
+$("#hour-16 .description").val(localStorage.getItem("hour-16"));
+$("#hour-17 .description").val(localStorage.getItem("hour-17"));
